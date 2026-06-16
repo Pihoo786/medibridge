@@ -1,5 +1,3 @@
-# backend/app/main.py
-
 from fastapi import FastAPI
 
 app = FastAPI(
@@ -12,4 +10,11 @@ app = FastAPI(
 def root():
     return {
         "message": "MediBridge AI Backend Running"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
     }
