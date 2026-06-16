@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     TWILIO_ACCOUNT_SID: str
     TWILIO_AUTH_TOKEN: str
     TWILIO_WHATSAPP_NUMBER: str
-
+    
+    ENCRYPTION_KEY: str
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"
