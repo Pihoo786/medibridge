@@ -1,13 +1,19 @@
-# backend/app/services/gemini_service.py
-
 class GeminiService:
-    async def process_submission(
-        self,
-        content: str,
-        input_type: str
-    ):
-        """
-        Process medical content using Gemini.
-        """
 
+    async def process_lab_report(
+        self,
+        image_bytes: bytes
+    ):
+        pass
+
+    async def process_prescription(
+        self,
+        image_bytes: bytes
+    ):
+        pass
+
+    async def process_symptom_message(
+        self,
+        text: str
+    ):
         pass
