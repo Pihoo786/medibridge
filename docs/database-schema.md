@@ -1,6 +1,36 @@
-# MediBridge AI - Database Schema (v1)
+# MediBridge AI - Database Schema (v2)
 
 Database: Supabase (PostgreSQL)
+
+---
+
+# Security Architecture
+
+Sensitive patient information is protected using field-level encryption.
+
+## Encryption
+
+Algorithm:
+
+AES-256-GCM(planned)
+
+Encrypted Fields:
+
+* phone_number
+* summary
+* patient_explanation
+
+## Hashing
+
+Algorithm:
+
+SHA-256
+
+Hashed Fields:
+
+* phone_number
+
+Hashing enables efficient user lookup without exposing plaintext phone numbers.
 
 ---
 
@@ -8,11 +38,12 @@ Database: Supabase (PostgreSQL)
 
 Stores patient information.
 
-| Column       | Type          |
-| ------------ | ------------- |
-| id           | UUID (PK)     |
-| phone_number | TEXT (UNIQUE) |
-| created_at   | TIMESTAMP     |
+| Column          | Type          |
+| --------------- | ------------- |
+| id              | UUID (PK)     |
+| phone_hash      | TEXT (UNIQUE) |
+| phone_encrypted | TEXT          |
+| created_at      | TIMESTAMP     |
 
 ---
 
@@ -34,7 +65,10 @@ Stores processed medical submissions.
 | status              | TEXT                 |
 | ai_model            | TEXT                 |
 | created_at          | TIMESTAMP            |
+Security Note:
 
+summary and patient_explanation are encrypted at the application layer before being stored in Supabase.
+The database stores ciphertext and does not perform encryption itself.
 ---
 
 ## Category Values
@@ -135,3 +169,9 @@ status is used to track processing lifecycle:
 RECEIVED → PROCESSING → COMPLETED / FAILED
 
 ai_model stores the Gemini model version used during report generation.
+
+summary and patient_explanation are encrypted before being stored in Supabase.
+
+phone_number is never stored in plaintext.
+
+User lookup is performed using SHA-256 hashes.
