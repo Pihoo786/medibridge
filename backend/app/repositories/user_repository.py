@@ -13,7 +13,7 @@ class UserRepository:
             .insert(data)
             .execute()
         )
-    
+
     async def get_by_phone_hash(
         self,
         phone_hash: str
@@ -23,5 +23,31 @@ class UserRepository:
             .table("users")
             .select("*")
             .eq("phone_hash", phone_hash)
+            .execute()
+        )
+
+    async def get_by_id(
+        self,
+        user_id: str
+    ):
+        return (
+            supabase
+            .table("users")
+            .select("*")
+            .eq("id", user_id)
+            .single()
+            .execute()
+        )
+
+    async def update(
+        self,
+        user_id: str,
+        data: dict
+    ):
+        return (
+            supabase
+            .table("users")
+            .update(data)
+            .eq("id", user_id)
             .execute()
         )

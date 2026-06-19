@@ -14,6 +14,16 @@ class ReportRepository:
             .execute()
         )
 
+    async def get_all(
+        self
+    ):
+        return (
+            supabase
+            .table("reports")
+            .select("*")
+            .execute()
+        )
+
     async def get_by_id(
         self,
         report_id: str
@@ -24,5 +34,18 @@ class ReportRepository:
             .select("*")
             .eq("id", report_id)
             .single()
+            .execute()
+        )
+
+    async def update(
+        self,
+        report_id: str,
+        data: dict
+    ):
+        return (
+            supabase
+            .table("reports")
+            .update(data)
+            .eq("id", report_id)
             .execute()
         )
