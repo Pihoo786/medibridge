@@ -3,6 +3,7 @@ from app.db.supabase import supabase
 
 class ReportRepository:
 
+<<<<<<< HEAD
     async def create(
         self,
         data: dict
@@ -13,6 +14,13 @@ class ReportRepository:
             .insert(data)
             .execute()
         )
+=======
+    return (
+        supabase.table("reports")
+        .insert(data)
+        .execute()
+    )
+>>>>>>> 407d2ee (feat: implement repository layer and supabase integration)
 
     async def get_all(
         self
@@ -37,6 +45,7 @@ class ReportRepository:
             .execute()
         )
 
+<<<<<<< HEAD
     async def update(
         self,
         report_id: str,
@@ -49,3 +58,35 @@ class ReportRepository:
             .eq("id", report_id)
             .execute()
         )
+=======
+    return (
+        supabase.table("reports")
+        .select("*")
+        .execute()
+    )
+
+
+def get_report_by_id(
+    report_id: str
+):
+
+    return (
+        supabase.table("reports")
+        .select("*")
+        .eq("id", report_id)
+        .execute()
+    )
+
+
+def update_report(
+    report_id: str,
+    data: dict
+):
+
+    return (
+        supabase.table("reports")
+        .update(data)
+        .eq("id", report_id)
+        .execute()
+    )
+>>>>>>> 407d2ee (feat: implement repository layer and supabase integration)
