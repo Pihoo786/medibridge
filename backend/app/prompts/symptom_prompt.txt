@@ -23,6 +23,12 @@ Response Format:
 "title": "",
 "summary": "",
 "patient_explanation": "",
-"key_findings": [],
+"key_findings": [
+{
+"name": "",
+"value": "",
+"status": ""
+}
+],
 "recommendations": []
 }
