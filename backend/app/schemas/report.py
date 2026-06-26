@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class ReportResponse(BaseModel):
 
-    report_id: str
+    id: str
 
     category: str
 

@@ -20,7 +20,7 @@ def test_get_report_by_id():
 
     assert report is not None
 
-    assert report["report_id"] == (
+    assert report["id"] == (
         "report_001"
     )
 
