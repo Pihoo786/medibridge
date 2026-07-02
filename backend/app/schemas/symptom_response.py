@@ -1,5 +1,11 @@
 from pydantic import BaseModel, Field
-from app.schemas.symptom_response import SymptomResponse
+
+
+class SymptomFinding(BaseModel):
+    name: str
+    value: str
+    status: str
+
 
 class SymptomResponse(BaseModel):
     category: str = Field(..., min_length=1)
@@ -7,5 +13,5 @@ class SymptomResponse(BaseModel):
     summary: str = Field(..., min_length=1)
     patient_explanation: str = Field(..., min_length=1)
 
-    key_findings: list[str] = Field(default_factory=list)
+    key_findings: list[SymptomFinding] = Field(default_factory=list)
     recommendations: list[str] = Field(default_factory=list)

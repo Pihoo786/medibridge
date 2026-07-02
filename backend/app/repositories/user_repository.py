@@ -1,7 +1,7 @@
 from app.db.supabase import supabase
 
 
-class ReportRepository:
+class UserRepository:
 
     async def create(
         self,
@@ -9,20 +9,19 @@ class ReportRepository:
     ):
         return (
             supabase
-            .table("reports")
+            .table("users")
             .insert(data)
             .execute()
         )
-
-    async def get_by_id(
+    
+    async def get_by_phone_hash(
         self,
-        report_id: str
+        phone_hash: str
     ):
         return (
             supabase
-            .table("reports")
+            .table("users")
             .select("*")
-            .eq("id", report_id)
-            .single()
+            .eq("phone_hash", phone_hash)
             .execute()
         )
