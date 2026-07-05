@@ -9,14 +9,20 @@ export const mockPatientData = [
     triageStatus: 'Critical',
     rawWhatsAppMessage:
       'Hello doctor, I have been having severe headache, dizziness, and shortness of breath since this morning. I also noticed my hands are shaking and I feel very weak.',
-    extractedMetrics: {
-      bloodPressure: '148/92',
-      heartRate: 112,
-      spO2: 93,
-      temperature: 38.4,
-    },
-    aiExplanation:
-      'The reported symptoms, together with elevated blood pressure and a low oxygen saturation reading, suggest a possible acute stress response or early respiratory concern. The patient should be monitored closely for worsening symptoms, especially if dizziness or shortness of breath increases. Hydration, rest, and urgent follow-up are recommended.'
+    aiResponse: {
+      category: 'SYMPTOM_MESSAGE',
+      summary: 'Patient reports severe headache, dizziness, shortness of breath, shaking hands, and weakness.',
+      patient_explanation:
+        'The reported symptoms, together with elevated blood pressure and a low oxygen saturation reading, suggest a possible acute stress response or early respiratory concern.',
+      doctor_notes:
+        'The patient should be monitored closely for worsening symptoms, especially if dizziness or shortness of breath increases. Hydration, rest, and urgent follow-up are recommended.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '148/92', status: 'High' },
+        { name: 'Heart Rate', value: '112 bpm', status: 'Elevated' },
+        { name: 'SpO2', value: '93%', status: 'Low' },
+        { name: 'Temperature', value: '38.4°C', status: 'High' }
+      ]
+    }
   },
   {
     id: 'PT-2039',
@@ -28,14 +34,20 @@ export const mockPatientData = [
     triageStatus: 'Stable',
     rawWhatsAppMessage:
       'My chest feels tight after walking up the stairs. I have mild cough and occasional fatigue, but the pain is not severe.',
-    extractedMetrics: {
-      bloodPressure: '126/80',
-      heartRate: 82,
-      spO2: 97,
-      temperature: 37.1,
-    },
-    aiExplanation:
-      'Current readings appear generally stable, with no major oxygen drop or fever. The symptoms are mild and may be related to exertion, allergies, or mild irritation. Continued observation and a follow-up assessment are advised if the cough persists.'
+    aiResponse: {
+      category: 'SYMPTOM_MESSAGE',
+      summary: 'Patient reports chest tightness after exertion with mild cough and fatigue.',
+      patient_explanation:
+        'Current readings appear generally stable, with no major oxygen drop or fever. The symptoms are mild and may be related to exertion, allergies, or mild irritation.',
+      doctor_notes:
+        'Continued observation and a follow-up assessment are advised if the cough persists.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '126/80', status: 'Normal' },
+        { name: 'Heart Rate', value: '82 bpm', status: 'Normal' },
+        { name: 'SpO2', value: '97%', status: 'Normal' },
+        { name: 'Temperature', value: '37.1°C', status: 'Normal' }
+      ]
+    }
   },
   {
     id: 'PT-2027',
@@ -47,14 +59,20 @@ export const mockPatientData = [
     triageStatus: 'Recovering',
     rawWhatsAppMessage:
       'I have been taking the new medication and have less nausea today. I still feel a bit tired, but my appetite is improving.',
-    extractedMetrics: {
-      bloodPressure: '118/76',
-      heartRate: 74,
-      spO2: 99,
-      temperature: 36.9,
-    },
-    aiExplanation:
-      'The patient shows signs of improvement with a normal temperature and stable oxygenation. The reduced nausea and improved appetite suggest a positive response to treatment. Ongoing monitoring is recommended to ensure steady recovery.'
+    aiResponse: {
+      category: 'PRESCRIPTION',
+      summary: 'Patient reports improved appetite and reduced nausea while on medication.',
+      patient_explanation:
+        'The patient shows signs of improvement with a normal temperature and stable oxygenation. The reduced nausea and improved appetite suggest a positive response to treatment.',
+      doctor_notes:
+        'Ongoing monitoring is recommended to ensure steady recovery.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '118/76', status: 'Normal' },
+        { name: 'Heart Rate', value: '74 bpm', status: 'Normal' },
+        { name: 'SpO2', value: '99%', status: 'Normal' },
+        { name: 'Temperature', value: '36.9°C', status: 'Normal' }
+      ]
+    }
   },
   {
     id: 'PT-2014',
@@ -66,14 +84,20 @@ export const mockPatientData = [
     triageStatus: 'Critical',
     rawWhatsAppMessage:
       'I woke up with severe abdominal pain and vomiting. My wife says I look pale and I am sweating heavily.',
-    extractedMetrics: {
-      bloodPressure: '90/58',
-      heartRate: 128,
-      spO2: 95,
-      temperature: 38.8,
-    },
-    aiExplanation:
-      'These findings indicate a concerning pattern that may require urgent intervention. The combination of low blood pressure, elevated heart rate, and severe pain suggests potential deterioration. Immediate medical escalation is advised.'
+    aiResponse: {
+      category: 'SYMPTOM_MESSAGE',
+      summary: 'Patient reports severe abdominal pain, vomiting, pallor, and heavy sweating.',
+      patient_explanation:
+        'These findings indicate a concerning pattern that may require urgent intervention. The combination of low blood pressure, elevated heart rate, and severe pain suggests potential deterioration.',
+      doctor_notes:
+        'Immediate medical escalation is advised.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '90/58', status: 'Low' },
+        { name: 'Heart Rate', value: '128 bpm', status: 'Elevated' },
+        { name: 'SpO2', value: '95%', status: 'Normal' },
+        { name: 'Temperature', value: '38.8°C', status: 'High' }
+      ]
+    }
   },
   {
     id: 'PT-2006',
@@ -85,14 +109,20 @@ export const mockPatientData = [
     triageStatus: 'Stable',
     rawWhatsAppMessage:
       'I have had mild fever for 2 days and sore throat. I am able to drink fluids and I do not have trouble breathing.',
-    extractedMetrics: {
-      bloodPressure: '120/78',
-      heartRate: 76,
-      spO2: 98,
-      temperature: 37.6,
-    },
-    aiExplanation:
-      'The symptoms point to a mild viral illness rather than an emergency. Vital signs remain mostly stable, and the patient is not showing signs of respiratory distress. Supportive care and rest are appropriate.'
+    aiResponse: {
+      category: 'LAB_REPORT',
+      summary: 'Patient reports mild fever and sore throat without respiratory distress.',
+      patient_explanation:
+        'The symptoms point to a mild viral illness rather than an emergency. Vital signs remain mostly stable, and the patient is not showing signs of respiratory distress.',
+      doctor_notes:
+        'Supportive care and rest are appropriate.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '120/78', status: 'Normal' },
+        { name: 'Heart Rate', value: '76 bpm', status: 'Normal' },
+        { name: 'SpO2', value: '98%', status: 'Normal' },
+        { name: 'Temperature', value: '37.6°C', status: 'High' }
+      ]
+    }
   },
   {
     id: 'PT-1998',
@@ -104,13 +134,19 @@ export const mockPatientData = [
     triageStatus: 'Recovering',
     rawWhatsAppMessage:
       'I am feeling better today. The swelling in my ankle has reduced and I can walk a little more comfortably now.',
-    extractedMetrics: {
-      bloodPressure: '122/79',
-      heartRate: 71,
-      spO2: 99,
-      temperature: 36.8,
-    },
-    aiExplanation:
-      'The patient appears to be improving. The lower swelling and stable vital signs suggest good recovery progress. Continued monitoring and adherence to care instructions are recommended.'
+    aiResponse: {
+      category: 'LAB_REPORT',
+      summary: 'Patient reports reduced ankle swelling and improved mobility.',
+      patient_explanation:
+        'The patient appears to be improving. The lower swelling and stable vital signs suggest good recovery progress.',
+      doctor_notes:
+        'Continued monitoring and adherence to care instructions are recommended.',
+      extracted_data: [
+        { name: 'Blood Pressure', value: '122/79', status: 'Normal' },
+        { name: 'Heart Rate', value: '71 bpm', status: 'Normal' },
+        { name: 'SpO2', value: '99%', status: 'Normal' },
+        { name: 'Temperature', value: '36.8°C', status: 'Normal' }
+      ]
+    }
   }
 ]

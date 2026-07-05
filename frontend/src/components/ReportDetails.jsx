@@ -10,29 +10,10 @@ function ReportDetails({ patient, onBack }) {
   if (!patient) return null
 
   const getTriageClass = (status) => activityTone[status] || activityTone.Stable
-
-  const metricCards = [
-    {
-      label: 'Blood Pressure',
-      value: patient.extractedMetrics.bloodPressure,
-      status: patient.extractedMetrics.bloodPressure.startsWith('14') ? 'High' : 'Normal'
-    },
-    {
-      label: 'Heart Rate',
-      value: `${patient.extractedMetrics.heartRate} bpm`,
-      status: patient.extractedMetrics.heartRate > 100 ? 'Elevated' : 'Normal'
-    },
-    {
-      label: 'SpO2',
-      value: `${patient.extractedMetrics.spO2}%`,
-      status: patient.extractedMetrics.spO2 < 95 ? 'Low' : 'Normal'
-    },
-    {
-      label: 'Temperature',
-      value: `${patient.extractedMetrics.temperature}°C`,
-      status: patient.extractedMetrics.temperature > 37.5 ? 'High' : 'Normal'
-    }
-  ]
+  const metrics = patient?.aiResponse?.extracted_data ?? []
+  const summary = patient?.aiResponse?.summary ?? 'No summary available yet.'
+  const patientExplanation = patient?.aiResponse?.patient_explanation ?? 'No patient explanation available yet.'
+  const doctorNotes = patient?.aiResponse?.doctor_notes ?? 'No doctor notes available yet.'
 
   return (
     <section className="p-4 sm:p-6">
@@ -94,9 +75,9 @@ function ReportDetails({ patient, onBack }) {
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {metricCards.map((metric) => (
-                <div key={metric.label} className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 transition duration-200 hover:border-cyan-500/30 hover:bg-[#102544]">
-                  <p className="text-sm text-slate-400">{metric.label}</p>
+              {metrics.map((metric) => (
+                <div key={metric.name} className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 transition duration-200 hover:border-cyan-500/30 hover:bg-[#102544]">
+                  <p className="text-sm text-slate-400">{metric.name}</p>
                   <div className="mt-2 flex items-end justify-between gap-3">
                     <h4 className="text-2xl font-semibold tracking-tight text-white">{metric.value}</h4>
                     <span className={`rounded-full px-2.5 py-1 text-xs ${
@@ -111,9 +92,19 @@ function ReportDetails({ patient, onBack }) {
               ))}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-slate-800 bg-[#0d172d] p-5">
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">AI explanation</p>
-              <p className="mt-3 leading-7 text-slate-200">{patient.aiExplanation}</p>
+            <div className="mt-6 space-y-4 rounded-2xl border border-slate-800 bg-[#0d172d] p-5">
+              <div>
+                <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Summary</p>
+                <p className="mt-3 leading-7 text-slate-200">{summary}</p>
+              </div>
+              <div>
+                <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Patient explanation</p>
+                <p className="mt-3 leading-7 text-slate-200">{patientExplanation}</p>
+              </div>
+              <div>
+                <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Doctor notes</p>
+                <p className="mt-3 leading-7 text-slate-200">{doctorNotes}</p>
+              </div>
             </div>
           </div>
         </div>
