@@ -19,7 +19,7 @@ function Login({ onLoginSuccess }) {
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-xl font-black tracking-wider text-white shadow-lg shadow-cyan-500/20">
             MB
           </div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-white">MedBridge Portal</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-white">MediBridge Portal</h2>
           <p className="mt-1.5 text-xs font-medium tracking-wide text-slate-400">AUTHORIZED HEALTHCARE PERSONNEL ONLY</p>
         </div>
 

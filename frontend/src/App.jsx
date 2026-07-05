@@ -186,7 +186,7 @@ function App() {
               MB
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-black tracking-tight text-white">MedBridge</span>
+              <span className="text-sm font-black tracking-tight text-white">MediBridge</span>
               <span className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.4em] text-slate-500">Enterprise</span>
             </div>
           </div>
