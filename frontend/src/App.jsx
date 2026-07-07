@@ -23,9 +23,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard-home')
   const [statusMessage, setStatusMessage] = useState('')
   const [patients, setPatients] = useState([])
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   console.log("User Profile in App:", userProfile)
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/reports")
+    fetch(`${API_BASE_URL}/reports`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
