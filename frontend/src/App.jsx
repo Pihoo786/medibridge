@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AdminDashboard from './components/AdminDashboard'
 import DoctorDashboard from './components/DoctorDashboard'
-import PatientHistory from './components/PatientHistory'
+import PatientHistory from './components/PatientRecords'
 import ReportDetails from './components/ReportDetails'
 
 // 🌐 Backend API Base URL from manager instructions
