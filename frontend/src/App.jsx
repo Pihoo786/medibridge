@@ -117,6 +117,10 @@ function App() {
     const temperature = Number(reviewForm.temperature) || 36.8
     const bloodPressure = reviewForm.bloodPressure || '120/80'
 
+    const aiSummary =
+      reviewForm.aiExplanation ||
+      `${reviewForm.name} has been added for review. The recorded symptoms suggest ${reviewForm.symptoms.toLowerCase()} and should be assessed by a clinician.`
+
     const newPatient = {
       id: `P-${Date.now()}`,
       name: reviewForm.name,
@@ -135,15 +139,18 @@ function App() {
             ? 'Recovering'
             : 'Stable',
       rawWhatsAppMessage: `New review added for ${reviewForm.name}: ${reviewForm.symptoms}`,
-      extractedMetrics: {
-        bloodPressure,
-        heartRate,
-        spO2,
-        temperature
-      },
-      aiExplanation:
-        reviewForm.aiExplanation ||
-        `${reviewForm.name} has been added for review. The recorded symptoms suggest ${reviewForm.symptoms.toLowerCase()} and should be assessed by a clinician.`
+      aiResponse: {
+        category: 'SYMPTOM_MESSAGE',
+        summary: aiSummary,
+        patient_explanation: aiSummary,
+        doctor_notes: 'Please review the submitted symptoms and vitals with clinical context.',
+        extracted_data: [
+          { name: 'Blood Pressure', value: bloodPressure, status: bloodPressure.startsWith('14') ? 'High' : 'Normal' },
+          { name: 'Heart Rate', value: `${heartRate} bpm`, status: heartRate > 100 ? 'Elevated' : 'Normal' },
+          { name: 'SpO2', value: `${spO2}%`, status: spO2 < 95 ? 'Low' : 'Normal' },
+          { name: 'Temperature', value: `${temperature}°C`, status: temperature > 37.5 ? 'High' : 'Normal' }
+        ]
+      }
     }
 
     setPatients((prev) => [newPatient, ...prev])
