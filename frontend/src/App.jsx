@@ -51,7 +51,7 @@ function App() {
       }
     }
     fetchInitialDashboardData()
-  } ?? [currentView])
+  }, [currentView])
 
   // 🔄 Fetch Isolated Patient History Timeline
   const handleLoadPatientHistory = async (patientId) => {
