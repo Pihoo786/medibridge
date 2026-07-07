@@ -6,6 +6,7 @@ from app.services.user_service import (
 from app.services.user_service import (
     get_doctor_patients,
     get_patient,
+    get_all_patients,
 )
 
 router = APIRouter()
@@ -20,6 +21,15 @@ async def fetch_doctor_patients(
     patients = await get_doctor_patients(
         doctor_id
     )
+
+    return {
+        "patients": patients
+    }
+
+@router.get("/patients")
+async def fetch_all_patients():
+
+    patients = await get_all_patients()
 
     return {
         "patients": patients
