@@ -23,6 +23,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard-home')
   const [statusMessage, setStatusMessage] = useState('')
   const [patients, setPatients] = useState([])
+  const [reportDetails, setReportDetails] = useState(null)
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   console.log("User Profile in App:", userProfile)
   useEffect(() => {
@@ -53,21 +54,33 @@ function App() {
     aiExplanation: ''
   })
 
-  const currentPatient = useMemo(() => {
-    if (!selectedPatient) return null
-    return patients.find((patient) => patient.id === selectedPatient)
-  }, [patients, selectedPatient])
+  const openReport = async (reportId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/reports/${reportId}/details`
+      )
 
-  const openReport = (patientId) => {
-    setSelectedPatient(patientId)
-    setActiveView('report')
-    setCurrentPage('dashboard-home')
+      const data = await response.json()
+
+      setReportDetails({
+        ...data.report,
+        findings: data.findings
+      })
+
+      setSelectedPatient(reportId)
+      setActiveView("report")
+      setCurrentPage("dashboard-home")
+
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const returnToDashboard = () => {
     setSelectedPatient(null)
     setActiveView('dashboard')
     setCurrentPage('dashboard-home')
+    setReportDetails(null)
   }
 
   const handleNavClick = (pageId) => {
@@ -272,31 +285,24 @@ function App() {
               <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500">Overview</p>
+                    <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500">ADMIN DASHBOARD</p>
                     <h1 className="mt-1 text-2xl font-semibold text-white">AI Medical Dashboard</h1>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {userProfile?.role === 'ADMIN' && (
-                      <>
-                        <button
-                          type="button"
-                          onClick={handleExport}
-                          className="hidden rounded-2xl border border-slate-700/80 bg-slate-900/80 px-4 py-2.5 text-sm font-medium text-slate-200 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 sm:inline-flex"
-                        >
-                          Export
-                        </button>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-3">
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                      Today
+                    </p>
 
-                        <button
-                          type="button"
-                          onClick={handleNewReview}
-                          className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition duration-200 hover:-translate-y-0.5"
-                        >
-                          + New Review
-                        </button>
-                      </>
-                    )}
+                    <p className="mt-1 text-sm font-semibold text-cyan-300">
+                      {new Date().toLocaleDateString("en-IN", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
                   </div>
-                  </div>
+                </div>
                 {statusMessage && (
                   <div className="mt-3 inline-flex rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-100">
                     {statusMessage}
@@ -457,7 +463,7 @@ function App() {
                   </button>
                 </div>
               </header>
-              <ReportDetails patient={currentPatient} onBack={returnToDashboard} />
+              <ReportDetails patient={reportDetails} onBack={returnToDashboard} />
             </>
           )}
 

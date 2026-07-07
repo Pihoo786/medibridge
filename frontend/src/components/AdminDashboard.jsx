@@ -1,3 +1,4 @@
+
 import React from 'react'
 
 
@@ -11,7 +12,18 @@ const activityTone = {
   SYMPTOM_MESSAGE:
     'bg-amber-500/15 text-amber-200 border-amber-500/20'
 }
+const statusTone = {
+  PROCESSED:
+    "bg-emerald-500/15 text-emerald-200 border-emerald-500/20",
 
+  PENDING:
+    "bg-amber-500/15 text-amber-200 border-amber-500/20",
+
+  FAILED:
+    "bg-rose-500/15 text-rose-200 border-rose-500/20",
+}
+const getStatusClass = (status) =>
+  statusTone[status] || statusTone.PROCESSED
 function AdminDashboard({
   patients,
   onOpenReport,
@@ -21,14 +33,51 @@ function AdminDashboard({
 }) {
   const getTriageClass = (status) => activityTone[status] || activityTone.Stable
   const visiblePatients = showAllActivity ? patients : patients.slice(0, 5)
+  const totalReports = patients.length;
+
+  const labReports = patients.filter(
+    p => p.category === "LAB_REPORT"
+  ).length;
+
+  const prescriptions = patients.filter(
+    p => p.category === "PRESCRIPTION"
+  ).length;
+
+  const symptomReports = patients.filter(
+    p => p.category === "SYMPTOM_MESSAGE"
+  ).length;
+
+  // Until you have a separate patients table,
+  // use unique user IDs as the patient count.
+  const totalPatients = new Set(
+    patients.map((p) => p.patient.id)
+  ).size;
   const summaryCards = [
     {
-      label: 'Total Reports',
-      value: patients.length,
-      change: 'Processed Reports',
-      tone: 'text-cyan-200'
+      label: "Total Patients",
+      value: totalPatients,
+      change: "Registered Patients",
+      tone: "text-cyan-200"
+    },
+    {
+      label: "Total Reports",
+      value: totalReports,
+      change: "AI Processed",
+      tone: "text-cyan-200"
+    },
+    {
+      label: "Lab Reports",
+      value: labReports,
+      change: "Blood Reports",
+      tone: "text-cyan-200"
+    },
+    {
+      label: "Prescriptions",
+      value: prescriptions,
+      change: "Medicines",
+      tone: "text-cyan-200"
     }
-  ]
+  ];
 
   return (
     <section className="space-y-6 p-4 sm:p-6">
@@ -57,88 +106,103 @@ function AdminDashboard({
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.55fr_1fr]">
+      <div className="grid">
         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-cyan-950/5">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">Live feed</p>
-              <h3 className="mt-1 text-lg font-semibold text-white">Recent Live Activity</h3>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">
+                Live Feed
+              </p>
+              <h3 className="mt-1 text-lg font-semibold text-white">
+                Recent Patient Reports
+              </h3>
             </div>
             <button
               type="button"
               onClick={onToggleViewAll}
               className="rounded-xl px-3 py-1.5 text-sm text-cyan-300 transition hover:bg-slate-800"
             >
-              {showAllActivity ? 'Show less' : 'View all'}
+              {showAllActivity ? "Show Less" : "View All"}
             </button>
           </div>
-          <div className="mt-4 space-y-3">
-            {visiblePatients.map((patient) => (
-              <button
-                key={patient.id}
-                onClick={() => onOpenReport(patient.id)}
-                className="flex w-full items-start gap-4 rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500/30 hover:bg-[#112246]"
-              >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/10 text-sm font-semibold text-cyan-100">
-                {patient.title?.split(' ').map((n) => n[0]).join('')}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="font-medium text-white">{patient.title}</p>
-                    <span className={`rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.category)}`}>
-                      {patient.category}
-                    </span>
-                  </div>
-                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-400">{patient.summary}</p>
-                  <p className="mt-2 text-xs text-slate-500">{new Date(patient.created_at).toLocaleString()}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-cyan-950/5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">Records</p>
-              <h3 className="mt-1 text-lg font-semibold text-white">Patient Records</h3>
-            </div>
-            <button
-              type="button"
-              onClick={onSeeAll}
-              className="rounded-xl px-3 py-1.5 text-sm text-cyan-300 transition hover:bg-slate-800"
-            >
-              See all
-            </button>
-          </div>
-          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-800">
+          <div className="mt-5 overflow-hidden rounded-2xl border border-slate-800">
             <table className="min-w-full divide-y divide-slate-800 text-sm">
               <thead className="bg-slate-950/80 text-slate-400">
                 <tr>
-                  <th className="px-3 py-3 text-left">Patient</th>
-                  <th className="px-3 py-3 text-left">Status</th>
-                  <th className="px-3 py-3 text-left">Last update</th>
+                  <th className="px-3 py-3 text-left">
+                    Patient
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Current Issue
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Doctor
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Category
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Status
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Received
+                  </th>
+                  <th className="px-3 py-3 text-left">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800 bg-[#0d172d]">
-                {patients.map((patient) => (
+                {visiblePatients.map((patient) => (
                   <tr
                     key={patient.id}
-                    className="cursor-pointer transition hover:bg-slate-800/50"
-                    onClick={() => onOpenReport(patient.id)}
+                    className="hover:bg-slate-800/50 transition"
                   >
-                    <td className="px-3 py-3 align-top">
-                      <div>
-                        <p className="font-medium text-white">{patient.title}</p>
-                        <p className="mt-1 text-xs text-slate-500">{patient.id}</p>
-                      </div>
+                    <td className="px-3 py-3 font-medium text-white">
+                      # {patient.patient?.phone_last4 ?? "----"}
                     </td>
-                    <td className="px-3 py-3 align-top">
-                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.category)}`}>
-                        {patient.category}
+                    <td className="px-3 py-3 text-slate-200">
+                      {patient.title}
+                    </td>
+                    <td className="px-3 py-3 text-slate-200">
+                      {patient.doctor?.name ?? (
+                        <span className="text-slate-500">Unassigned</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3">
+                      <span
+                        className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${getTriageClass(
+                          patient.category
+                        )}`}
+                      >
+                        {patient.category_display}
                       </span>
                     </td>
-                    <td className="px-3 py-3 align-top text-slate-400">{new Date(patient.created_at).toLocaleString()}</td>
+                    <td className="px-3 py-3">
+                      <span
+                        className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${getStatusClass(
+                          patient.status
+                        )}`}
+                      >
+                        {patient.status_display}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-slate-400">
+                      {new Date(patient.created_at).toLocaleString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </td>
+                    <td className="px-3 py-3">
+                      <button
+                        onClick={() => onOpenReport(patient.id)}
+                        className="rounded-lg border border-cyan-500/20 px-3 py-1 text-xs text-cyan-300 transition hover:bg-cyan-500/10"
+                      >
+                        View
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

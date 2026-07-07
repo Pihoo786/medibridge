@@ -13,54 +13,40 @@ const statusColors = {
 
 function PatientRecords() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('All')
   const [sortBy, setSortBy] = useState('created_at')
-  const [reports, setReports] = useState([])
+  const [patients, setPatients] = useState([])
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/reports`)
+    fetch(`${API_BASE_URL}/patients`)
       .then((res) => res.json())
       .then((data) => {
-        setReports(data.reports || [])
+        setPatients(data.patients || []);
       })
-      .catch((err) => console.error(err))
-  }, [])
+      .catch((err) => console.error(err));
+  }, []);
 
-  const filteredReports = useMemo(() => {
-    const term = searchTerm.toLowerCase()
+  const filteredPatients = useMemo(() => {
+    const term = searchTerm.toLowerCase();
 
-    const filtered =
-      statusFilter === 'All'
-        ? reports
-        : reports.filter(
-            (r) => r.category === statusFilter
-          )
-
-    const sorted = [...filtered].sort((a, b) => {
-      if (sortBy === 'title') {
-        return a.title.localeCompare(b.title)
+    const sorted = [...patients].sort((a, b) => {
+      if (sortBy === "report_count") {
+        return b.report_count - a.report_count;
       }
 
       return (
-        new Date(b.created_at) -
-        new Date(a.created_at)
-      )
-    })
+        new Date(b.last_report_at || 0) -
+        new Date(a.last_report_at || 0)
+      );
+    });
 
     return sorted.filter(
-      (r) =>
-        r.title.toLowerCase().includes(term) ||
-        r.id.toLowerCase().includes(term)
-    )
-  }, [reports, searchTerm, statusFilter, sortBy])
+      (patient) =>
+        patient.phone.toLowerCase().includes(term) ||
+        patient.id.toLowerCase().includes(term)
+    );
+  }, [patients, searchTerm, sortBy]);
 
-  const categories = [
-    'All',
-    'LAB_REPORT',
-    'PRESCRIPTION',
-    'SYMPTOM_MESSAGE'
-  ]
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6 p-8">
@@ -69,16 +55,16 @@ function PatientRecords() {
 
         <div>
           <h1 className="text-2xl font-black tracking-tight text-white">
-            Medical Reports
+            Patient Records
           </h1>
 
           <p className="mt-1 text-sm text-slate-500">
-            Reports processed by Gemini AI
+            View and manage assigned patients.
           </p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-200">
-          Total Reports: {reports.length}
+          Total Patients: {patients.length}
         </div>
 
       </div>
@@ -90,27 +76,13 @@ function PatientRecords() {
           onChange={(e) =>
             setSearchTerm(e.target.value)
           }
-          placeholder="Search by report title or ID..."
+          placeholder="Search by phone or patient ID..."
           className="w-full rounded-2xl border border-slate-800 bg-slate-900 px-4 py-2 text-white"
         />
 
         <div className="flex gap-2">
 
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() =>
-                setStatusFilter(category)
-              }
-              className={`rounded-xl px-3 py-2 text-xs ${
-                statusFilter === category
-                  ? 'bg-cyan-500 text-black'
-                  : 'bg-slate-900 text-slate-300'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+          
 
           <button
             onClick={() =>
@@ -160,19 +132,19 @@ function PatientRecords() {
 
           <tbody>
 
-            {filteredReports.map((report) => (
+            {filteredReports.map((patient) => (
 
               <tr
-                key={report.id}
+                key={patient.id}
                 className="border-t border-slate-800 hover:bg-slate-900"
               >
 
                 <td className="px-6 py-4 text-slate-400">
-                  {report.id}
+                  {patient.id}
                 </td>
 
                 <td className="px-6 py-4 text-white font-semibold">
-                  {report.title}
+                  {patient.phone}
                 </td>
 
                 <td className="px-6 py-4">

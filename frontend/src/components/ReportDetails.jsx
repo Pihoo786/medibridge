@@ -8,7 +8,16 @@ const activityTone = {
 
 function ReportDetails({ patient, onBack }) {
   if (!patient) return null
+  
+  const keyFindings =
+    patient.findings?.filter(
+      (item) => item.field_name !== "Recommendation"
+    ) || [];
 
+  const recommendations =
+    patient.findings?.filter(
+      (item) => item.field_name === "Recommendation"
+    ) || [];
   const getCategoryClass = (category) =>
     activityTone[category] || activityTone.LAB_REPORT
 
@@ -116,47 +125,58 @@ function ReportDetails({ patient, onBack }) {
             </div>
 
             <div className="mt-6">
-
               <h3 className="mb-4 text-lg font-semibold text-white">
-                Key Findings
+                AI Key Findings
               </h3>
 
               <div className="space-y-3">
+                {keyFindings.length > 0 ? (
+                  keyFindings.map((finding) => (
+                    <div
+                      key={finding.id}
+                      className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4"
+                    >
+                      <p className="font-semibold text-cyan-300">
+                        {finding.field_name}
+                      </p>
 
-                {(patient.key_findings || []).map((finding, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-slate-200"
-                  >
-                    • {finding}
+                      <p className="mt-2 text-sm text-slate-300">
+                        Status: {finding.field_value}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-slate-500">
+                    No findings available.
                   </div>
-                ))}
+                )}
+              </div>
 
+              <div className="mt-6">
+                <h3 className="mb-4 text-lg font-semibold text-white">
+                  Recommendations
+                </h3>
+
+                <div className="space-y-3">
+                  {recommendations.length > 0 ? (
+                    recommendations.map((recommendation) => (
+                      <div
+                        key={recommendation.id}
+                        className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-slate-200"
+                      >
+                        • {recommendation.field_value}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-slate-500">
+                      No recommendations available.
+                    </div>
+                  )}
+                </div>
               </div>
 
             </div>
-
-            <div className="mt-6">
-
-              <h3 className="mb-4 text-lg font-semibold text-white">
-                Recommendations
-              </h3>
-
-              <div className="space-y-3">
-
-                {(patient.recommendations || []).map((recommendation, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-slate-200"
-                  >
-                    • {recommendation}
-                  </div>
-                ))}
-
-              </div>
-
-            </div>
-
+            
           </div>
 
         </div>
