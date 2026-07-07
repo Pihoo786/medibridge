@@ -279,6 +279,7 @@ class TwilioService:
 
         findings = []
 
+        # Save AI key findings
         for finding in response.key_findings:
 
             findings.append(
@@ -290,10 +291,20 @@ class TwilioService:
                 }
             )
 
-        if findings:
-            await self.extracted_repository.create_many(
-                findings
+        # Save AI recommendations
+        for recommendation in response.recommendations:
+
+            findings.append(
+                {
+                    "report_id": report_id,
+                    "field_name": "Recommendation",
+                    "field_value": recommendation,
+                    "status": "Suggested",
+                }
             )
+
+        if findings:
+            await self.extracted_repository.create_many(findings)
 
         return created_report
 

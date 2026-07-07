@@ -72,3 +72,14 @@ class UserRepository:
             .eq("id", user_id)
             .execute()
         )
+    
+    async def get_all(
+        self
+    ):
+        return (
+            supabase
+            .table("users")
+            .select("id, phone_last4, created_at, assigned_doctor_id")
+            .order("created_at", desc=True)
+            .execute()
+        )
