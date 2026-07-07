@@ -41,3 +41,6 @@ This repository contains both the backend services and the frontend dashboard fo
 - The current frontend uses mock data so backend endpoints can be connected later.
 - The dashboard includes conditional rendering between the home dashboard and a selected patient report details view.
 - Tailwind classes are used for the medical portal styling and responsive layout.
+
+
+

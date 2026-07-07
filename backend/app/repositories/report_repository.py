@@ -46,7 +46,18 @@ class ReportRepository:
             .single()
             .execute()
         )
-
+    async def get_by_user(
+        self,
+        user_id: str
+    ):
+        return (
+            supabase
+            .table("reports")
+            .select("*")
+            .eq("user_id", user_id)
+            .order("created_at", desc=True)
+            .execute()
+        )
     async def update(
         self,
         report_id: str,
@@ -57,5 +68,34 @@ class ReportRepository:
             .table("reports")
             .update(data)
             .eq("id", report_id)
+            .execute()
+        )
+    
+    async def get_latest_by_user(
+        self,
+        user_id: str
+    ):
+        return (
+            supabase
+            .table("reports")
+            .select("category, created_at")
+            .eq("user_id", user_id)
+            .order("created_at", desc=True)
+            .limit(1)
+            .execute()
+        )
+    
+    async def count_by_user(
+        self,
+        user_id: str
+    ):
+        return (
+            supabase
+            .table("reports")
+            .select(
+                "id",
+                count="exact"
+            )
+            .eq("user_id", user_id)
             .execute()
         )

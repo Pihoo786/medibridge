@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.twilio import router as twilio_router
 from app.routes.health import router as health_router
 from app.routes.reports import router as reports_router
+from app.routes.user import router as user_router
 
 app = FastAPI(
     title="MediBridge AI",
@@ -27,4 +28,5 @@ def root():
 
 app.include_router(health_router)
 app.include_router(reports_router)
+app.include_router(user_router)
 app.include_router(twilio_router)
