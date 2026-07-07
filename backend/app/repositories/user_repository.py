@@ -38,6 +38,16 @@ class UserRepository:
             .single()
             .execute()
         )
+    async def get_doctors(
+        self
+    ):
+        return (
+            supabase
+            .table("profiles")
+            .select("id, full_name")
+            .eq("role", "DOCTOR")
+            .execute()
+        )
 
     async def update(
         self,

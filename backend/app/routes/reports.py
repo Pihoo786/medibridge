@@ -17,10 +17,10 @@ router = APIRouter()
     "/reports",
     response_model=ReportListResponse
 )
-def fetch_reports():
+async def fetch_reports():
 
     return {
-        "reports": get_reports()
+        "reports": await get_reports()
     }
 
 
@@ -28,9 +28,9 @@ def fetch_reports():
     "/reports/{report_id}",
     response_model=ReportResponse
 )
-def fetch_report(report_id: str):
+async def fetch_report(report_id: str):
 
-    report = get_report_by_id(report_id)
+    report = await get_report_by_id(report_id)
 
     if report is None:
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -16,9 +16,17 @@ class ReportResponse(BaseModel):
 
     patient_explanation: str
 
-    key_findings: List[str]
+    doctor_notes: str
 
-    recommendations: List[str]
+    input_type: str
+
+    source_url: str
+
+    status: str
+
+    ai_model: str
+
+    assigned_doctor_id: Optional[str] = None
 
     created_at: datetime
 
