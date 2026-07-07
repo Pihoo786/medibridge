@@ -4,11 +4,25 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
+class PatientInfo(BaseModel):
+    id: str
+    phone_last4: Optional[str] = None
+
+class DoctorInfo(BaseModel):
+    id: Optional[str] = None
+    name: Optional[str] = None
+
+
 class ReportResponse(BaseModel):
 
     id: str
 
+    patient: PatientInfo
+
+    doctor: Optional[DoctorInfo] = None
+
     category: str
+    category_display: str
 
     title: str
 
@@ -16,21 +30,15 @@ class ReportResponse(BaseModel):
 
     patient_explanation: str
 
-    doctor_notes: str
+    status: str
+    status_display: str
 
     input_type: str
 
-    source_url: str
-
-    status: str
-
     ai_model: str
-
-    assigned_doctor_id: Optional[str] = None
 
     created_at: datetime
 
 
 class ReportListResponse(BaseModel):
-
     reports: List[ReportResponse]

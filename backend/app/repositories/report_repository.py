@@ -20,9 +20,58 @@ class ReportRepository:
         return (
             supabase
             .table("reports")
-            .select("*")
+            .select("""
+                id,
+                category,
+                title,
+                summary,
+                patient_explanation,
+                status,
+                input_type,
+                ai_model,
+                created_at,
+                user:users!reports_user_id_fkey(
+                    id,
+                    phone_last4
+                ),
+                doctor:profiles!reports_assigned_doctor_id_fkey(
+                    id,
+                    full_name
+                )
+            """)
+            .order("created_at", desc=True)
             .execute()
         )
+    
+    async def get_dashboard_reports(
+        self
+    ):
+        return (
+            supabase
+            .table("reports")
+            .select("""
+                id,
+                category,
+                title,
+                summary,
+                patient_explanation,
+                status,
+                input_type,
+                ai_model,
+                created_at,
+                user:users(
+                    id,
+                    phone_last4
+                ),
+                doctor:profiles(
+                    id,
+                    full_name
+                )
+            """)
+            .order("created_at", desc=True)
+            .execute()
+        )
+    
     async def get_by_assigned_doctor(
         self,
         doctor_id: str
@@ -99,3 +148,5 @@ class ReportRepository:
             .eq("user_id", user_id)
             .execute()
         )
+    
+    
