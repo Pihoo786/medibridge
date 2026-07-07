@@ -3,7 +3,7 @@ import AdminDashboard from './components/AdminDashboard'
 import ReportDetails from './components/ReportDetails'
 import Login from './components/Login'
 import PatientRecords from './components/PatientRecords'
-import { supabase } from './lib/supabase'
+import { supabase } from "./lib/supabase";
 import DoctorDashboard from "./components/DoctorDashboard";
 
 const adminNavItems = [
@@ -23,9 +23,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState('dashboard-home')
   const [statusMessage, setStatusMessage] = useState('')
   const [patients, setPatients] = useState([])
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   console.log("User Profile in App:", userProfile)
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/reports")
+    fetch(`${API_BASE_URL}/reports`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
@@ -185,10 +186,7 @@ function App() {
       aiExplanation: ''
     })
   }
-  const navItems =
-    userProfile?.role === 'ADMIN'
-      ? adminNavItems
-      : doctorNavItems
+  
   if (!isLoggedIn) {
     return (
       <Login
