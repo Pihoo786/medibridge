@@ -48,7 +48,18 @@ class UserRepository:
             .eq("role", "DOCTOR")
             .execute()
         )
-
+    async def get_by_assigned_doctor(
+        self,
+        doctor_id: str
+    ):
+        return (
+            supabase
+            .table("users")
+            .select("id, phone_last4, created_at, assigned_doctor_id")
+            .eq("assigned_doctor_id", doctor_id)
+            .order("created_at", desc=True)
+            .execute()
+        )
     async def update(
         self,
         user_id: str,

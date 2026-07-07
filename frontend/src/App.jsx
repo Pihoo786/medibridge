@@ -1,22 +1,42 @@
-import { useMemo, useState } from 'react'
-import DashboardHome from './components/DashboardHome'
+import { useEffect, useMemo, useState } from 'react'
+import AdminDashboard from './components/AdminDashboard'
 import ReportDetails from './components/ReportDetails'
 import Login from './components/Login'
 import PatientRecords from './components/PatientRecords'
-import { mockPatientData } from './mockPatientData'
+import { supabase } from './lib/supabase'
+import DoctorDashboard from "./components/DoctorDashboard";
 
-const navItems = [
+const adminNavItems = [
   { id: 'dashboard-home', label: 'Dashboard Home', icon: '◫' },
   { id: 'patient-records', label: 'Patient Records', icon: '▣' }
 ]
 
+const doctorNavItems = [
+  { id: 'dashboard-home', label: 'Dashboard Home', icon: '◫' }
+]
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userProfile, setUserProfile] = useState(null)
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [activeView, setActiveView] = useState('dashboard')
   const [currentPage, setCurrentPage] = useState('dashboard-home')
   const [statusMessage, setStatusMessage] = useState('')
-  const [patients, setPatients] = useState(mockPatientData)
+  const [patients, setPatients] = useState([])
+  console.log("User Profile in App:", userProfile)
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/reports")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+
+        setPatients(data.reports || [])
+      })
+      .catch((err) => {
+        console.error(err)
+        setPatients([])
+      })
+  }, [])
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
   const [showAllActivity, setShowAllActivity] = useState(false)
   const [reviewForm, setReviewForm] = useState({
@@ -165,10 +185,20 @@ function App() {
       aiExplanation: ''
     })
   }
-
+  const navItems =
+    userProfile?.role === 'ADMIN'
+      ? adminNavItems
+      : doctorNavItems
   if (!isLoggedIn) {
-    return <Login onLoginSuccess={() => setIsLoggedIn(true)} />
-  }
+    return (
+      <Login
+        onLoginSuccess={(profile) => {
+          setUserProfile(profile)
+          setIsLoggedIn(true)
+        }}
+      />
+    )
+    }
 
   return (
     <div className="min-h-screen bg-[#020917] text-slate-100">
@@ -206,10 +236,28 @@ function App() {
           <div className="flex flex-col gap-3 border-t border-slate-800/80 bg-[#0b1220]/80 p-4">
             <div className="flex items-center gap-2.5 px-3 py-1">
               <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
-              <span className="text-xs font-semibold tracking-wide text-slate-300">User profile</span>
+              <div>
+                <p className="text-sm font-semibold text-white">
+                  {userProfile?.full_name}
+                </p>
+
+                <p className="text-[11px] uppercase tracking-wide text-cyan-400">
+                  {userProfile?.role}
+                </p>
+
+                {userProfile?.specialization && (
+                  <p className="text-[11px] text-slate-500">
+                    {userProfile.specialization}
+                  </p>
+                )}
+              </div>
             </div>
             <button
-              onClick={() => setIsLoggedIn(false)}
+              onClick={async () => {
+                await supabase.auth.signOut()
+                setUserProfile(null)
+                setIsLoggedIn(false)
+              }}
               className="flex w-full items-center gap-2 rounded-2xl px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 transition-all duration-200 hover:bg-rose-500/5 hover:text-rose-200"
             >
               ↩ Sign Out
@@ -227,35 +275,50 @@ function App() {
                     <h1 className="mt-1 text-2xl font-semibold text-white">AI Medical Dashboard</h1>
                   </div>
                   <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={handleExport}
-                      className="hidden rounded-2xl border border-slate-700/80 bg-slate-900/80 px-4 py-2.5 text-sm font-medium text-slate-200 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 sm:inline-flex"
-                    >
-                      Export
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleNewReview}
-                      className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition duration-200 hover:-translate-y-0.5"
-                    >
-                      + New Review
-                    </button>
+                    {userProfile?.role === 'ADMIN' && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={handleExport}
+                          className="hidden rounded-2xl border border-slate-700/80 bg-slate-900/80 px-4 py-2.5 text-sm font-medium text-slate-200 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 sm:inline-flex"
+                        >
+                          Export
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleNewReview}
+                          className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition duration-200 hover:-translate-y-0.5"
+                        >
+                          + New Review
+                        </button>
+                      </>
+                    )}
                   </div>
-                </div>
+                  </div>
                 {statusMessage && (
                   <div className="mt-3 inline-flex rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-100">
                     {statusMessage}
                   </div>
                 )}
               </header>
-              <DashboardHome
-                patients={patients}
-                onOpenReport={openReport}
-                showAllActivity={showAllActivity}
-                onToggleViewAll={toggleViewAllActivity}
-                onSeeAll={openPatientRecords}
-              />
+                {userProfile?.role === "ADMIN" ? (
+                <AdminDashboard
+                  patients={patients}
+                  onOpenReport={openReport}
+                  showAllActivity={showAllActivity}
+                  onToggleViewAll={toggleViewAllActivity}
+                  onSeeAll={openPatientRecords}
+                />
+              ) : (
+                <DoctorDashboard
+                  patients={patients}
+                  onOpenReport={openReport}
+                  showAllActivity={showAllActivity}
+                  onToggleViewAll={toggleViewAllActivity}
+                  onSeeAll={openPatientRecords}
+                />
+              )}
             </>
           )}
 

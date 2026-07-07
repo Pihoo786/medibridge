@@ -1,12 +1,50 @@
 import React, { useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    if (onLoginSuccess) onLoginSuccess()
+
+    setLoading(true)
+    setError('')
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+      return
+    }
+
+    console.log("Auth User:", data.user)
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .maybeSingle()
+
+    console.log("Profile:", profile)
+    console.log("Profile Error:", profileError)
+    if (profileError) {
+      setError(profileError.message)
+      setLoading(false)
+      return
+    }
+
+    if (onLoginSuccess) {
+      onLoginSuccess(profile)
+    }
+
+    setLoading(false)
   }
 
   return (
@@ -19,18 +57,27 @@ function Login({ onLoginSuccess }) {
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-xl font-black tracking-wider text-white shadow-lg shadow-cyan-500/20">
             MB
           </div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-white">MediBridge Portal</h2>
-          <p className="mt-1.5 text-xs font-medium tracking-wide text-slate-400">AUTHORIZED HEALTHCARE PERSONNEL ONLY</p>
+
+          <h2 className="text-2xl font-extrabold tracking-tight text-white">
+            MediBridge Portal
+          </h2>
+
+          <p className="mt-1.5 text-xs font-medium tracking-wide text-slate-400">
+            AUTHORIZED HEALTHCARE PERSONNEL ONLY
+          </p>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Email Address</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Email Address
+            </label>
+
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="doctor@medibridge.com"
+              placeholder="doctor@medibridge.ai"
               required
               className="w-full rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-sm text-white placeholder-slate-500 shadow-inner outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
             />
@@ -38,9 +85,18 @@ function Login({ onLoginSuccess }) {
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Password</label>
-              <button type="button" className="text-xs font-medium text-cyan-300 transition-colors hover:text-cyan-200">Forgot?</button>
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                Password
+              </label>
+
+              <button
+                type="button"
+                className="text-xs font-medium text-cyan-300 hover:text-cyan-200"
+              >
+                Forgot?
+              </button>
             </div>
+
             <input
               type="password"
               value={password}
@@ -51,11 +107,18 @@ function Login({ onLoginSuccess }) {
             />
           </div>
 
+          {error && (
+            <p className="text-center text-sm text-red-400">
+              {error}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 py-3.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition duration-200 hover:-translate-y-0.5 hover:shadow-cyan-500/25 active:scale-[0.99]"
+            disabled={loading}
+            className="mt-2 w-full rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 py-3.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/15 transition duration-200 hover:-translate-y-0.5 hover:shadow-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Authenticate Securely
+            {loading ? 'Signing In...' : 'Authenticate Securely'}
           </button>
         </form>
       </div>

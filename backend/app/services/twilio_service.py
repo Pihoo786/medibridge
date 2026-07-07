@@ -219,7 +219,7 @@ class TwilioService:
         phone = secure_phone_number(
             phone_number
         )
-
+        phone["phone_last4"] = phone_number[-4:]
         existing_user = await self.user_repository.get_by_phone_hash(
             phone["phone_hash"]
         )

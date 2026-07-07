@@ -1,39 +1,18 @@
 import React from 'react'
 
-const summaryCards = [
-  {
-    label: 'Total Logs Captured',
-    value: '1,284',
-    change: '+12.4%',
-    tone: 'text-cyan-200'
-  },
-  {
-    label: 'Critical Alerts Urgent',
-    value: '18',
-    change: '5 new today',
-    tone: 'text-rose-200'
-  },
-  {
-    label: 'Pending Triage Review',
-    value: '24',
-    change: '8 awaiting doctor',
-    tone: 'text-amber-200'
-  },
-  {
-    label: 'System Operational Status',
-    value: '99.98%',
-    change: 'All services online',
-    tone: 'text-emerald-200'
-  }
-]
 
 const activityTone = {
-  Critical: 'bg-rose-500/15 text-rose-200 border-rose-500/20',
-  Stable: 'bg-emerald-500/15 text-emerald-200 border-emerald-500/20',
-  Recovering: 'bg-amber-500/15 text-amber-200 border-amber-500/20'
+  LAB_REPORT:
+    'bg-cyan-500/15 text-cyan-200 border-cyan-500/20',
+
+  PRESCRIPTION:
+    'bg-emerald-500/15 text-emerald-200 border-emerald-500/20',
+
+  SYMPTOM_MESSAGE:
+    'bg-amber-500/15 text-amber-200 border-amber-500/20'
 }
 
-function DashboardHome({
+function AdminDashboard({
   patients,
   onOpenReport,
   showAllActivity,
@@ -42,6 +21,14 @@ function DashboardHome({
 }) {
   const getTriageClass = (status) => activityTone[status] || activityTone.Stable
   const visiblePatients = showAllActivity ? patients : patients.slice(0, 5)
+  const summaryCards = [
+    {
+      label: 'Total Reports',
+      value: patients.length,
+      change: 'Processed Reports',
+      tone: 'text-cyan-200'
+    }
+  ]
 
   return (
     <section className="space-y-6 p-4 sm:p-6">
@@ -93,17 +80,17 @@ function DashboardHome({
                 className="flex w-full items-start gap-4 rounded-2xl border border-slate-800 bg-[#0d172d] p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-cyan-500/30 hover:bg-[#112246]"
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/10 text-sm font-semibold text-cyan-100">
-                  {patient.name.split(' ').map((n) => n[0]).join('')}
+                {patient.title?.split(' ').map((n) => n[0]).join('')}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="font-medium text-white">{patient.name}</p>
-                    <span className={`rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.triageStatus)}`}>
-                      {patient.triageStatus}
+                    <p className="font-medium text-white">{patient.title}</p>
+                    <span className={`rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.category)}`}>
+                      {patient.category}
                     </span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-400">{patient.rawWhatsAppMessage}</p>
-                  <p className="mt-2 text-xs text-slate-500">{patient.lastCheckIn}</p>
+                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-400">{patient.summary}</p>
+                  <p className="mt-2 text-xs text-slate-500">{new Date(patient.created_at).toLocaleString()}</p>
                 </div>
               </button>
             ))}
@@ -142,16 +129,16 @@ function DashboardHome({
                   >
                     <td className="px-3 py-3 align-top">
                       <div>
-                        <p className="font-medium text-white">{patient.name}</p>
+                        <p className="font-medium text-white">{patient.title}</p>
                         <p className="mt-1 text-xs text-slate-500">{patient.id}</p>
                       </div>
                     </td>
                     <td className="px-3 py-3 align-top">
-                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.triageStatus)}`}>
-                        {patient.triageStatus}
+                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${getTriageClass(patient.category)}`}>
+                        {patient.category}
                       </span>
                     </td>
-                    <td className="px-3 py-3 align-top text-slate-400">{patient.lastCheckIn}</td>
+                    <td className="px-3 py-3 align-top text-slate-400">{new Date(patient.created_at).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -163,4 +150,4 @@ function DashboardHome({
   )
 }
 
-export default DashboardHome
+export default AdminDashboard

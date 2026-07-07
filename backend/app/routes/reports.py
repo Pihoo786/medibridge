@@ -7,7 +7,9 @@ from app.schemas.report import (
 
 from app.services.report_service import (
     get_reports,
-    get_report_by_id
+    get_report_by_id,
+    get_reports_by_user,
+    get_report_details,
 )
 
 router = APIRouter()
@@ -22,7 +24,6 @@ async def fetch_reports():
     return {
         "reports": await get_reports()
     }
-
 
 @router.get(
     "/reports/{report_id}",
@@ -40,3 +41,29 @@ async def fetch_report(report_id: str):
         )
 
     return report
+
+@router.get(
+    "/patients/{user_id}/history"
+)
+async def fetch_patient_history(
+    user_id: str
+):
+
+    reports = await get_reports_by_user(
+        user_id
+    )
+
+    return {
+        "history": reports
+    }
+
+
+@router.get("/reports/{report_id}/details")
+async def fetch_report_details(
+    report_id: str
+):
+    details = await get_report_details(
+        report_id
+    )
+
+    return details
