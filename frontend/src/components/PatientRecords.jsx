@@ -87,16 +87,16 @@ function PatientRecords() {
           <button
             onClick={() =>
               setSortBy(
-                sortBy === 'created_at'
-                  ? 'title'
-                  : 'created_at'
+                sortBy === "last_report_at"
+                  ? "report_count"
+                  : "last_report_at"
               )
             }
             className="rounded-xl bg-slate-900 px-3 py-2 text-xs text-slate-200"
           >
-            Sort: {sortBy === 'created_at'
-              ? 'Latest'
-              : 'Title'}
+            Sort: {sortBy === "last_report_at"
+              ? "Latest Activity"
+              : "Report Count"}
           </button>
 
         </div>
@@ -110,61 +110,45 @@ function PatientRecords() {
           <thead className="bg-slate-950 text-slate-400">
 
             <tr>
-              <th className="px-6 py-4">
-                Report ID
-              </th>
-
-              <th className="px-6 py-4">
-                Title
-              </th>
-
-              <th className="px-6 py-4">
-                Category
-              </th>
-
-              <th className="px-6 py-4">
-                Created
-              </th>
-
+              <th className="px-6 py-4">Patient</th>
+              <th className="px-6 py-4">Reports</th>
+              <th className="px-6 py-4">Latest Report</th>
+              <th className="px-6 py-4">Last Activity</th>
             </tr>
 
           </thead>
 
           <tbody>
 
-            {filteredReports.map((patient) => (
+            {filteredPatients.map((patient) => (
 
               <tr
                 key={patient.id}
                 className="border-t border-slate-800 hover:bg-slate-900"
               >
 
-                <td className="px-6 py-4 text-slate-400">
-                  {patient.id}
-                </td>
-
-                <td className="px-6 py-4 text-white font-semibold">
+                <td className="px-6 py-4 font-semibold text-white">
                   {patient.phone}
                 </td>
 
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 text-cyan-300 font-semibold">
+                  {patient.report_count}
+                </td>
 
+                <td className="px-6 py-4">
                   <span
                     className={`rounded-full border px-3 py-1 text-xs ${
-                      statusColors[
-                        report.category
-                      ]
+                      statusColors[patient.latest_report_category]
                     }`}
                   >
-                    {report.category}
+                    {patient.latest_report_category?.replace("_", " ")}
                   </span>
-
                 </td>
 
                 <td className="px-6 py-4 text-slate-400">
-                  {new Date(
-                    report.created_at
-                  ).toLocaleString()}
+                  {patient.last_report_at
+                    ? new Date(patient.last_report_at).toLocaleString("en-IN")
+                    : "-"}
                 </td>
 
               </tr>
