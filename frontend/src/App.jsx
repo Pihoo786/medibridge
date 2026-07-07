@@ -49,15 +49,12 @@ function App() {
       } catch (err) {
         setError(err.message || 'Unable to load reports.')
       } finally {
-        setIsLoading(false)
-      }
+      setIsLoading(false)
+    }
+    
     }
     fetchInitialDashboardData()
-<<<<<<< HEAD
-  }, [isAuthenticated, currentView])
-=======
-  }, [currentView])
->>>>>>> 5b0cf40f06fb140a6bf094d4dc2d4e6e92ff6117
+    }, [isAuthenticated, currentView])
 
   const handleLoadPatientHistory = async (patientId) => {
     setSelectedPatientId(patientId)
