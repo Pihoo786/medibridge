@@ -7,7 +7,48 @@ repository = ReportRepository()
 
 async def get_reports():
     response = await repository.get_all()
-    return response.data
+
+    reports = []
+
+    for report in response.data:
+
+        reports.append({
+            "id": report["id"],
+
+            "patient": {
+                "id": report["user"]["id"] if report["user"] else None,
+                "phone_last4": report["user"]["phone_last4"] if report["user"] else None,
+            },
+
+            "doctor": (
+                {
+                    "id": report["doctor"]["id"],
+                    "name": report["doctor"]["full_name"] or "Unknown Doctor",
+                }
+                if report["doctor"]
+                else None
+            ),
+
+            "category": report["category"],
+            "category_display": report["category"].replace("_", " ").title(),
+
+            "title": report["title"],
+
+            "summary": report["summary"],
+
+            "patient_explanation": report["patient_explanation"],
+
+            "status": report["status"],
+            "status_display": report["status"].replace("_", " ").title(),
+
+            "input_type": report["input_type"],
+
+            "ai_model": report["ai_model"],
+
+            "created_at": report["created_at"]
+        })
+
+    return reports
 
 
 async def get_report_by_id(report_id: str):
