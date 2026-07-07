@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AdminDashboard from './components/AdminDashboard'
 import DoctorDashboard from './components/DoctorDashboard'
-import PatientHistory from './components/PatientHistory'
+import PatientHistory from './components/PatientRecords'
 import ReportDetails from './components/ReportDetails'
 import Login from './components/Login'
 
@@ -53,7 +53,11 @@ function App() {
       }
     }
     fetchInitialDashboardData()
+<<<<<<< HEAD
   }, [isAuthenticated, currentView])
+=======
+  }, [currentView])
+>>>>>>> 5b0cf40f06fb140a6bf094d4dc2d4e6e92ff6117
 
   const handleLoadPatientHistory = async (patientId) => {
     setSelectedPatientId(patientId)
