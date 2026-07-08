@@ -447,7 +447,7 @@ function App() {
             </div>
           )}
 
-          {currentPage === 'dashboard-home' && activeView === 'report' && currentPatient && (
+          {currentPage === 'dashboard-home' && activeView === 'report' && reportDetails && (
             <>
               <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
