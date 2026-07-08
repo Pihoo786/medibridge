@@ -32,6 +32,8 @@ class ReportResponse(BaseModel):
 
     status: str
     status_display: str
+    triage_level: str | None = None
+    triage_reason: str | None = None
 
     input_type: str
 
