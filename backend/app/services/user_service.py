@@ -59,17 +59,16 @@ async def get_all_patients():
 
     for user in users.data:
 
-        report_count = await report_repository.count_by_user(
-            user["id"]
-        )
+        reports = user.get("reports", [])
 
-        latest_report = await report_repository.get_latest_by_user(
-            user["id"]
-        )
+        report_count = len(reports)
 
         latest = (
-            latest_report.data[0]
-            if latest_report.data
+            max(
+                reports,
+                key=lambda r: r["created_at"]
+            )
+            if reports
             else None
         )
 
@@ -78,7 +77,7 @@ async def get_all_patients():
                 "id": user["id"],
                 "phone": f"+91******{user['phone_last4']}",
                 "assigned_at": user["created_at"],
-                "report_count": report_count.count,
+                "report_count": report_count,
                 "last_report_at": (
                     latest["created_at"]
                     if latest

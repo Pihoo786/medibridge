@@ -5,6 +5,7 @@ import Login from './components/Login'
 import PatientRecords from './components/PatientRecords'
 import { supabase } from './lib/supabase'
 import DoctorDashboard from "./components/DoctorDashboard";
+import PatientHistory from "./components/PatientHistory";
 
 const adminNavItems = [
   { id: 'dashboard-home', label: 'Dashboard Home', icon: '◫' },
@@ -24,6 +25,8 @@ function App() {
   const [statusMessage, setStatusMessage] = useState('')
   const [patients, setPatients] = useState([])
   const [reportDetails, setReportDetails] = useState(null)
+  const [patientDetails, setPatientDetails] = useState(null)
+  const [patientHistory, setPatientHistory] = useState([])
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   console.log("User Profile in App:", userProfile)
   useEffect(() => {
@@ -76,11 +79,35 @@ function App() {
     }
   }
 
+  const openPatientHistory = async (patientId) => {
+    try {
+      const [patientRes, historyRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/patients/${patientId}`),
+        fetch(`${API_BASE_URL}/patients/${patientId}/history`)
+      ])
+
+      const patient = await patientRes.json()
+      const history = await historyRes.json()
+
+      setPatientDetails(patient)
+      setPatientHistory(history.history || [])
+
+      setActiveView("patient-history")
+      setCurrentPage("patient-records")
+
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const returnToDashboard = () => {
     setSelectedPatient(null)
-    setActiveView('dashboard')
-    setCurrentPage('dashboard-home')
     setReportDetails(null)
+    setPatientDetails(null)
+    setPatientHistory([])
+
+    setActiveView("dashboard")
+    setCurrentPage("dashboard-home")
   }
 
   const handleNavClick = (pageId) => {
@@ -467,7 +494,60 @@ function App() {
             </>
           )}
 
-          {currentPage === 'patient-records' && <PatientRecords />}
+          {currentPage === "patient-records" && activeView === "dashboard" && (<PatientRecords onOpenPatient={openPatientHistory}/>)}
+          {currentPage === "patient-records" && activeView === "patient-history" && (
+            <>
+              <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500">
+                      Patient
+                    </p>
+
+                    <h1 className="mt-1 text-2xl font-semibold text-white">
+                      Medical History
+                    </h1>
+                  </div>
+                </div>
+              </header>
+
+              <PatientHistory
+                patient={patientDetails}
+                history={patientHistory}
+                onOpenReport={openReport}
+                onBack={() => {
+                  setActiveView("dashboard")
+                  setCurrentPage("patient-records")
+                }}
+              />
+            </>
+          )}
+          {activeView === "patient-history" && (
+            <>
+              <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500">
+                      Patient
+                    </p>
+                    <h1 className="mt-1 text-2xl font-semibold text-white">
+                      Medical History
+                    </h1>
+                  </div>
+                </div>
+              </header>
+
+              <PatientHistory
+                patient={patientDetails}
+                history={patientHistory}
+                onOpenReport={openReport}
+                onBack={() => {
+                  setActiveView("dashboard");
+                  setCurrentPage("patient-records");
+                }}
+              />
+            </>
+          )}
         </main>
       </div>
     </div>

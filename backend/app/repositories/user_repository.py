@@ -79,7 +79,17 @@ class UserRepository:
         return (
             supabase
             .table("users")
-            .select("id, phone_last4, created_at, assigned_doctor_id")
+            .select("""
+                id,
+                phone_last4,
+                created_at,
+                assigned_doctor_id,
+                reports(
+                    id,
+                    category,
+                    created_at
+                )
+            """)
             .order("created_at", desc=True)
             .execute()
         )

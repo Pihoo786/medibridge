@@ -11,7 +11,7 @@ const statusColors = {
     'border-amber-500/20 bg-amber-500/10 text-amber-200'
 }
 
-function PatientRecords() {
+function PatientRecords({ onOpenPatient }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [patients, setPatients] = useState([])
@@ -114,6 +114,7 @@ function PatientRecords() {
               <th className="px-6 py-4">Reports</th>
               <th className="px-6 py-4">Latest Report</th>
               <th className="px-6 py-4">Last Activity</th>
+              <th className="px-6 py-4">Action</th>
             </tr>
 
           </thead>
@@ -149,6 +150,15 @@ function PatientRecords() {
                   {patient.last_report_at
                     ? new Date(patient.last_report_at).toLocaleString("en-IN")
                     : "-"}
+                </td>
+
+                <td className="px-6 py-4">
+                  <button
+                    onClick={() => onOpenPatient(patient.id)}
+                    className="rounded-lg border border-cyan-500/20 px-4 py-2 text-xs text-cyan-300 transition hover:bg-cyan-500/10"
+                  >
+                    View History
+                  </button>
                 </td>
 
               </tr>
