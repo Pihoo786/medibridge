@@ -40,6 +40,8 @@ async def get_reports():
 
             "status": report["status"],
             "status_display": report["status"].replace("_", " ").title(),
+            "triage_level": report.get("triage_level"),
+            "triage_reason": report.get("triage_reason"),
 
             "input_type": report["input_type"],
 
@@ -77,5 +79,7 @@ async def get_report_details(
 
     return {
         "report": report.data,
-        "findings": findings.data
+        "findings": findings.data,
+        "triage_level": report["triage_level"],
+        "triage_reason": report["triage_reason"]
     }

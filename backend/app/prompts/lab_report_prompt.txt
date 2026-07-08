@@ -41,3 +41,43 @@ Response Format:
   "recommendations": []
 }
 Recommendations should be short, actionable, and patient-friendly. Include home-care advice when appropriate, recommend consulting a healthcare professional when needed.
+Determine the medical urgency of the case.
+
+Choose ONLY one:
+
+LOW
+MEDIUM
+HIGH
+
+Rules:
+
+HIGH
+- Chest pain
+- Difficulty breathing
+- Severe allergic reaction
+- Very abnormal lab values
+- Loss of consciousness
+- Stroke symptoms
+- Heart attack symptoms
+- Extremely high fever with serious symptoms
+
+MEDIUM
+- Persistent fever
+- Vomiting
+- Moderate infection
+- Moderate lab abnormalities
+- Medication side effects
+
+LOW
+- Common cold
+- Mild cough
+- Routine prescription
+- Normal lab reports
+- Minor symptoms
+
+Also explain briefly why you chose that urgency.
+
+Return:
+
+triage_level
+triage_reason

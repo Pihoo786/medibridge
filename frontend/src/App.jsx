@@ -346,11 +346,12 @@ function App() {
                 />
               ) : (
                 <DoctorDashboard
-                  patients={patients}
-                  onOpenReport={openReport}
-                  showAllActivity={showAllActivity}
-                  onToggleViewAll={toggleViewAllActivity}
-                  onSeeAll={openPatientRecords}
+                    patients={patients}
+                    onOpenReport={openReport}
+                    onOpenPatientRecords={() => {
+                        setCurrentPage("patient-records")
+                        setActiveView("dashboard")
+                    }}
                 />
               )}
             </>
@@ -522,32 +523,8 @@ function App() {
               />
             </>
           )}
-          {activeView === "patient-history" && (
-            <>
-              <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500">
-                      Patient
-                    </p>
-                    <h1 className="mt-1 text-2xl font-semibold text-white">
-                      Medical History
-                    </h1>
-                  </div>
-                </div>
-              </header>
-
-              <PatientHistory
-                patient={patientDetails}
-                history={patientHistory}
-                onOpenReport={openReport}
-                onBack={() => {
-                  setActiveView("dashboard");
-                  setCurrentPage("patient-records");
-                }}
-              />
-            </>
-          )}
+          
+      
         </main>
       </div>
     </div>

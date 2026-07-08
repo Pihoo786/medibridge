@@ -8,10 +8,13 @@ class KeyFinding(BaseModel):
 
 
 class GeminiResponse(BaseModel):
-    category: str = Field(..., min_length=1)
-    title: str = Field(..., min_length=1)
-    summary: str = Field(..., min_length=1)
-    patient_explanation: str = Field(..., min_length=1)
+    category: str
+    title: str
+    summary: str
+    patient_explanation: str
 
     key_findings: list[KeyFinding] = []
     recommendations: list[str] = []
+
+    triage_level: str | None = None
+    triage_reason: str | None = None

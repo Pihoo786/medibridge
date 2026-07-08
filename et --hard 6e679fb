@@ -1,0 +1,57 @@
+* [33m5b0cf40[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mui-enhancments[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Trigger deployment
+* [33md22105f[m Trigger deployment
+*   [33m066cd07[m Merge pull request #5 from Pihoo786/medical-dashboard-updates
+[32m|[m[33m\[m  
+[32m|[m * [33m6e679fb[m feat: complete medical dashboard priorities, history timeline, and report filters
+[32m|[m[32m/[m  
+* [33mf554e93[m fix: track frontend Supabase client
+* [33m84278d3[m fix: track frontend Supabase client
+* [33m18514fa[m fix: track frontend Supabase client
+* [33m5e5a523[m feat: configure frontend for Railway backend integration
+*   [33m9561c56[m Merge branch 'feature/frontend-backend-integration' :wq# the commit.
+[34m|[m[35m\[m  
+[34m|[m * [33mc35ddc1[m[33m ([m[1;31morigin/feature/frontend-backend-integration[m[33m, [m[1;32mfeature/frontend-backend-integration[m[33m)[m feat: complete backend MVP with patient history and report APIs
+* [35m|[m [33mc7ec7b0[m Merge pull request #4 from Pihoo786/feature/frontend-backend-integration
+[36m|[m[35m\[m[35m|[m 
+[36m|[m * [33m204e9fe[m[33m ([m[1;33mtag: [m[1;33mv1.0-medical-report-pipeline[m[33m)[m feat: add WhatsApp medical report processing pipeline
+[36m|[m[36m/[m  
+* [33m74bc598[m fix: clean merged repository implementations
+*   [33m90d7c1f[m Merge pull request #2 from Pihoo786/backend-database
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33ma57db97[m refactor: align report schema with database
+[1;32m|[m * [33mcbce129[m feat: implement repository layer and supabase integration
+[1;32m|[m * [33m7044f62[m feat: implement repository layer and database schemas
+[1;32m|[m * [33m8b9e5e1[m Add report update service and backend tests
+[1;32m|[m * [33ma5b8f6a[m Add report services and report API routes
+[1;32m|[m * [33m2346a9c[m Add health route and API response
+[1;32m|[m * [33m42d59d9[m Merged backend-database into main
+[1;32m|[m[1;32m/[m  
+*   [33m074ee64[m Merge feature/gemini-architecture into main
+[1;34m|[m[1;35m\[m  
+[1;34m|[m * [33md8388ef[m[33m ([m[1;31morigin/feature/gemini-architecture[m[33m, [m[1;32mfeature/gemini-architecture[m[33m)[m feat: complete Gemini AI backend pipeline
+[1;34m|[m * [33mc737fd4[m feat: implement Gemini service architecture
+[1;34m|[m * [33m8a91593[m feat: improve gemini prompt templates
+[1;34m|[m * [33m33f4364[m feat: add gemini response schema
+[1;34m|[m * [33m3ee9a4c[m feat: add Gemini response schema and AI contract v2
+[1;34m|[m * [33m12e90c6[m docs: add Gemini prompt templates
+* [1;35m|[m   [33mbecaa0a[m Merge pull request #1 from Pihoo786/tanisha
+[1;35m|[m[31m\[m [1;35m\[m  
+[1;35m|[m [31m|[m[1;35m/[m  
+[1;35m|[m[1;35m/[m[31m|[m   
+[1;35m|[m * [33m672bb1d[m[33m ([m[1;31morigin/tanisha[m[33m, [m[1;32mtanisha[m[33m)[m Fix spelling mistake
+[1;35m|[m * [33m8ba77b7[m Fix spelling mistake
+[1;35m|[m * [33m2a43dc6[m feat: add dashboard home, login, patient records, and report details components
+[1;35m|[m * [33mc1221da[m Remove unused vb file
+[1;35m|[m * [33m05ed304[m Add initial vb file
+* [31m|[m [33m02128aa[m[33m ([m[1;31morigin/feature/supabase-schema[m[33m, [m[1;32mfeature/supabase-schema[m[33m)[m docs: update database schema with security architecture
+* [31m|[m [33md39c68d[m[33m ([m[1;32mfeature/security-architecture[m[33m)[m feat: add encryption and hashing services
+* [31m|[m [33m1deca90[m docs: add security architecture to database schema
+* [31m|[m [33mc137f42[m[33m ([m[1;31morigin/feature/backend-architecture[m[33m, [m[1;32mfeature/backend-architecture[m[33m)[m docs: add backend processing flow
+* [31m|[m [33mb4286ab[m feat: create backend architecture foundation
+* [31m|[m [33mcc6b554[m feat: create backend architecture foundation
+* [31m|[m [33mf6ed3b6[m docs: finalize database and ai contracts v1
+[31m|[m[31m/[m  
+* [33m7a3ef54[m Add project documentation structure
+* [33m92801f1[m Add project documentation structure
+* [33mfe4f424[m Add initial project structure
+* [33m7c9183c[m Initial commit

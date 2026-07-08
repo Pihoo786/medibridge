@@ -267,6 +267,8 @@ class TwilioService:
             "input_type": input_type,
             "source_url": source_url,
             "status": "PROCESSED",
+            "triage_level": response.triage_level,
+            "triage_reason": response.triage_reason,
             "ai_model": "gemini-2.5-flash",
             "assigned_doctor_id": assigned_doctor_id,
         }
