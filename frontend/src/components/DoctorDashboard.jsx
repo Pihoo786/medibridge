@@ -96,9 +96,17 @@ function DoctorDashboard({
             Review assigned reports, monitor AI processing, and access patient
             histories.
           </p>
+          
 
         </div>
-
+        <p className="mt-1 text-sm font-semibold text-cyan-300">
+                      {new Date().toLocaleDateString("en-IN", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
         <button
           onClick={onOpenPatientRecords}
           className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-5 py-2.5 text-sm font-medium text-cyan-300 transition hover:bg-cyan-500/20"

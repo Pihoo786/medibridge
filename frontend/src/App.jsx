@@ -243,8 +243,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#020917] text-slate-100">
-      <div className="mx-auto flex min-h-screen max-w-7xl">
-        <aside className="hidden w-72 flex-col border-r border-slate-800/80 bg-[#0b1220] shadow-2xl shadow-cyan-950/10 lg:flex">
+      <div className="flex min-h-screen">
+        <aside className="fixed left-0 top-0 hidden h-screen w-72 flex-col border-r border-slate-800/80 bg-[#0b1220] shadow-2xl shadow-cyan-950/10 lg:flex">
           <div className="flex items-center gap-3 border-b border-slate-800/80 bg-[#0b1220] p-6">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-sm font-black text-white shadow-lg shadow-cyan-500/10">
               MB
@@ -306,9 +306,10 @@ function App() {
           </div>
         </aside>
 
-        <main className="flex-1 overflow-y-auto bg-[#020917]">
+        <main className="ml-72 flex-1 overflow-y-auto bg-[#020917]">
           {currentPage === 'dashboard-home' && activeView === 'dashboard' && (
             <>
+            {userProfile?.role !== "DOCTOR" && (
               <header className="border-b border-slate-800/80 bg-[#0b1220] px-5 py-4 sm:px-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
@@ -336,6 +337,7 @@ function App() {
                   </div>
                 )}
               </header>
+            )}
                 {userProfile?.role === "ADMIN" ? (
                 <AdminDashboard
                   patients={patients}
@@ -354,6 +356,7 @@ function App() {
                     }}
                 />
               )}
+            
             </>
           )}
 
