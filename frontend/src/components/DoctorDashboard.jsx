@@ -22,6 +22,17 @@ const statusColors = {
     "bg-rose-500/10 text-rose-300 border-rose-500/20",
 };
 
+const triageColors = {
+  HIGH:
+    "bg-red-500/15 text-red-300 border-red-500/20",
+
+  MEDIUM:
+    "bg-amber-500/15 text-amber-300 border-amber-500/20",
+
+  LOW:
+    "bg-emerald-500/15 text-emerald-300 border-emerald-500/20",
+};
+
 function DoctorDashboard({
   patients = [],
   onOpenReport,
@@ -34,8 +45,8 @@ function DoctorDashboard({
     );
   }).length;
 
-  const pendingReviews = patients.filter(
-    (p) => p.status !== "PROCESSED"
+  const highPriority = patients.filter(
+    (p) => p.triage_level === "HIGH"
   ).length;
 
   const processedToday = patients.filter(
@@ -54,8 +65,8 @@ function DoctorDashboard({
       subtitle: "Received",
     },
     {
-      label: "Pending Reviews",
-      value: pendingReviews,
+      label: "High Priority",
+      value: highPriority,
       subtitle: "Needs attention",
     },
     {
@@ -167,7 +178,20 @@ function DoctorDashboard({
 
           ) : (
 
-            patients.slice(0, 6).map((patient) => (
+            [...patients]
+              .sort((a, b) => {
+                const priority = {
+                  HIGH: 3,
+                  MEDIUM: 2,
+                  LOW: 1,
+                };
+
+                return (
+                  (priority[b.triage_level] || 0) -
+                  (priority[a.triage_level] || 0)
+                );
+              })
+              .slice(0, 6).map((patient) => (
 
               <div
                 key={patient.id}
@@ -195,6 +219,15 @@ function DoctorDashboard({
                       {patient.summary}
 
                     </p>
+                    {patient.triage_reason && (
+
+                      <p className="mt-2 text-xs text-slate-500 italic">
+
+                        AI Triage: {patient.triage_reason}
+
+                      </p>
+
+                    )}
 
                     <p className="mt-2 text-xs text-slate-500">
 
@@ -216,13 +249,25 @@ function DoctorDashboard({
                     {patient.category_display}
                   </span>
 
-                  <span
-                    className={`rounded-full border px-3 py-1 text-xs ${
-                      statusColors[patient.status]
-                    }`}
-                  >
-                    {patient.status_display}
-                  </span>
+                  {patient.triage_level ? (
+
+                    <span
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                        triageColors[patient.triage_level]
+                      }`}
+                    >
+                      {patient.triage_level}
+                    </span>
+
+                  ) : (
+
+                    <span
+                      className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-400"
+                    >
+                      N/A
+                    </span>
+
+                  )}
 
                   <button
                     onClick={() => onOpenReport(patient.id)}

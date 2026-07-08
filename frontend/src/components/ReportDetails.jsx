@@ -6,6 +6,12 @@ const activityTone = {
   SYMPTOM_MESSAGE: 'bg-amber-500/15 text-amber-200 border-amber-500/20'
 }
 
+const triageTone = {
+  HIGH: "bg-red-500/15 text-red-300 border-red-500/20",
+  MEDIUM: "bg-amber-500/15 text-amber-300 border-amber-500/20",
+  LOW: "bg-emerald-500/15 text-emerald-300 border-emerald-500/20",
+}
+
 function ReportDetails({ patient, onBack }) {
   if (!patient) return null
   
@@ -87,7 +93,31 @@ function ReportDetails({ patient, onBack }) {
               </div>
 
             </div>
+            {patient.triage_level && (
+              <div className="mt-6 rounded-2xl border border-slate-800 bg-[#0d172d] p-5">
 
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                  AI TRIAGE
+                </p>
+
+                <div className="mt-4 flex items-center gap-3">
+
+                  <span
+                    className={`rounded-full border px-3 py-1 text-sm font-semibold ${
+                      triageTone[patient.triage_level]
+                    }`}
+                  >
+                    {patient.triage_level} PRIORITY
+                  </span>
+
+                </div>
+
+                <p className="mt-4 leading-7 text-slate-300">
+                  {patient.triage_reason}
+                </p>
+
+              </div>
+            )}
             <div className="mt-6 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-950 to-slate-900 p-6">
 
               <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
