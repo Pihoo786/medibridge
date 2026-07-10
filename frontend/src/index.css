@@ -44,3 +44,24 @@ button {
   background: linear-gradient(180deg, #0f172a, #1e3a8a);
   border-radius: 999px;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #020917;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020917;
+}

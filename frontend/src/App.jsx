@@ -6,6 +6,8 @@ import PatientRecords from './components/PatientRecords'
 import { supabase } from './lib/supabase'
 import DoctorDashboard from "./components/DoctorDashboard";
 import PatientHistory from "./components/PatientHistory";
+import LandingPage from "./pages/LandingPage";
+
 
 const adminNavItems = [
   { id: 'dashboard-home', label: 'Dashboard Home', icon: '◫' },
@@ -18,6 +20,7 @@ const doctorNavItems = [
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showLanding, setShowLanding] = useState(true)
   const [userProfile, setUserProfile] = useState(null)
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [activeView, setActiveView] = useState('dashboard')
@@ -231,15 +234,23 @@ function App() {
       ? adminNavItems
       : doctorNavItems
   if (!isLoggedIn) {
+    if (showLanding) {
+      return (
+        <LandingPage
+          onDoctorLogin={() => setShowLanding(false)}
+        />
+      );
+    }
+
     return (
       <Login
         onLoginSuccess={(profile) => {
-          setUserProfile(profile)
-          setIsLoggedIn(true)
+          setUserProfile(profile);
+          setIsLoggedIn(true);
         }}
       />
-    )
-    }
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#020917] text-slate-100">
@@ -298,6 +309,7 @@ function App() {
                 await supabase.auth.signOut()
                 setUserProfile(null)
                 setIsLoggedIn(false)
+                setShowLanding(true)
               }}
               className="flex w-full items-center gap-2 rounded-2xl px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 transition-all duration-200 hover:bg-rose-500/5 hover:text-rose-200"
             >
