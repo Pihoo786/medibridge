@@ -36,6 +36,15 @@ class GeminiClient:
             .strip()
         )
 
+        print("=" * 80)
+        print("RAW GEMINI RESPONSE")
+        print(repr(response.text))
+        print("=" * 80)
+
+        print("CLEANED RESPONSE")
+        print(cleaned_response)
+        print("=" * 80)
+
         return json.loads(
             cleaned_response
         )
@@ -63,6 +72,15 @@ class GeminiClient:
             .replace("```", "")
             .strip()
         )
+
+        print("=" * 80)
+        print("RAW GEMINI RESPONSE")
+        print(repr(response.text))
+        print("=" * 80)
+
+        print("CLEANED RESPONSE")
+        print(cleaned_response)
+        print("=" * 80)
 
         return json.loads(
             cleaned_response
