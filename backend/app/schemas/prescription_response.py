@@ -15,3 +15,6 @@ class PrescriptionResponse(BaseModel):
 
     key_findings: list[Medicine] = Field(default_factory=list)
     recommendations: list[str] = Field(default_factory=list)
+
+    triage_level: str | None = None
+    triage_reason: str | None = None
