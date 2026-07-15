@@ -21,7 +21,7 @@ function LandingPage({ onDoctorLogin }) {
 
       <WhyMediBridge />
 
-      <Demo />
+      {/*<Demo />*/}
 
       <HowItWorks />
 
