@@ -38,9 +38,12 @@ Response Format:
       "status": ""
     }
   ],
-  "recommendations": []
+  "recommendations": [],
+  "triage_level": "LOW",
+  "triage_reason": ""
 }
-Recommendations should be short, actionable, and patient-friendly. Include home-care advice when appropriate, recommend consulting a healthcare professional when needed.
+Recommendations should be short, actionable, and patient-friendly.
+
 Determine the medical urgency of the case.
 
 Choose ONLY one:
@@ -55,29 +58,32 @@ HIGH
 - Chest pain
 - Difficulty breathing
 - Severe allergic reaction
-- Very abnormal lab values
 - Loss of consciousness
 - Stroke symptoms
 - Heart attack symptoms
-- Extremely high fever with serious symptoms
+- Severe bleeding
+- Persistent high fever with serious symptoms
 
 MEDIUM
 - Persistent fever
 - Vomiting
 - Moderate infection
-- Moderate lab abnormalities
+- Moderate dehydration
+- Symptoms lasting several days
 - Medication side effects
 
 LOW
 - Common cold
 - Mild cough
-- Routine prescription
-- Normal lab reports
+- Mild sore throat
+- Minor headache
 - Minor symptoms
 
-Also explain briefly why you chose that urgency.
+Populate BOTH of these fields inside the JSON:
 
-Return:
+- triage_level
+- triage_reason
 
-triage_level
-triage_reason
+Return ONLY valid JSON.
+
+Do not return any text before or after the JSON object.

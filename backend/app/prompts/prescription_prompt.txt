@@ -39,4 +39,8 @@ Response Format:
   ],
   "recommendations": []
 }
-Recommendations should be short, actionable, and patient-friendly. Include home-care advice when appropriate, recommend consulting a healthcare professional when needed.
+Recommendations should be short, actionable, and patient-friendly.
+
+Return ONLY the JSON object shown above.
+
+Do not include any explanation, markdown, code fences, or additional text before or after the JSON.

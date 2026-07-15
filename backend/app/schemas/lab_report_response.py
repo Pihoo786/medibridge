@@ -6,12 +6,14 @@ class LabFinding(BaseModel):
     value: str = Field(..., min_length=1)
     status: str = Field(..., min_length=1)
 
-
 class LabReportResponse(BaseModel):
-    category: str = Field(..., min_length=1)
-    title: str = Field(..., min_length=1)
-    summary: str = Field(..., min_length=1)
-    patient_explanation: str = Field(..., min_length=1)
+    category: str
+    title: str
+    summary: str
+    patient_explanation: str
 
-    key_findings: list[LabFinding] = Field(default_factory=list)
-    recommendations: list[str] = Field(default_factory=list)
+    key_findings: list[LabFinding]
+    recommendations: list[str]
+
+    triage_level: str
+    triage_reason: str

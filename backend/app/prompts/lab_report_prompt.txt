@@ -38,16 +38,12 @@ Response Format:
       "status": ""
     }
   ],
-  "recommendations": []
+  "recommendations": [],
+  "triage_level": "LOW",
+  "triage_reason": ""
 }
 Recommendations should be short, actionable, and patient-friendly. Include home-care advice when appropriate, recommend consulting a healthcare professional when needed.
-Determine the medical urgency of the case.
-
-Choose ONLY one:
-
-LOW
-MEDIUM
-HIGH
+Determine the medical urgency based on the findings.
 
 Rules:
 
@@ -75,9 +71,11 @@ LOW
 - Normal lab reports
 - Minor symptoms
 
-Also explain briefly why you chose that urgency.
+Always populate:
 
-Return:
+- triage_level
+- triage_reason
 
-triage_level
-triage_reason
+Both fields MUST be included inside the JSON object.
+
+Return ONLY valid JSON.
