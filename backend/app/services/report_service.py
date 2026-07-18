@@ -79,7 +79,5 @@ async def get_report_details(
 
     return {
         "report": report.data,
-        "findings": findings.data,
-        "triage_level": report["triage_level"],
-        "triage_reason": report["triage_reason"]
+        "findings": findings.data
     }
