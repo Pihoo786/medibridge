@@ -46,6 +46,7 @@ function App() {
       })
   }, [])
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [previousState, setPreviousState] = useState(null)
   const [showAllActivity, setShowAllActivity] = useState(false)
   const [reviewForm, setReviewForm] = useState({
     name: '',
@@ -60,14 +61,19 @@ function App() {
     aiExplanation: ''
   })
 
-  const openReport = async (reportId) => {
+  const openReport = async (reportId, source = null) => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/reports/${reportId}/details`
       )
 
       const data = await response.json()
-
+      setPreviousState({
+        activeView,
+        currentPage,
+        patientDetails,
+        patientHistory
+      })
       setReportDetails({
         ...data.report,
         findings: data.findings
@@ -106,9 +112,18 @@ function App() {
   const returnToDashboard = () => {
     setSelectedPatient(null)
     setReportDetails(null)
+
+    if (previousState) {
+      setActiveView(previousState.activeView)
+      setCurrentPage(previousState.currentPage)
+      setPatientDetails(previousState.patientDetails)
+      setPatientHistory(previousState.patientHistory)
+      setPreviousState(null)
+      return
+    }
+
     setPatientDetails(null)
     setPatientHistory([])
-
     setActiveView("dashboard")
     setCurrentPage("dashboard-home")
   }
@@ -353,7 +368,7 @@ function App() {
                 {userProfile?.role === "ADMIN" ? (
                 <AdminDashboard
                   patients={patients}
-                  onOpenReport={openReport}
+                  onOpenReport={(id) => openReport(id, "dashboard")}
                   showAllActivity={showAllActivity}
                   onToggleViewAll={toggleViewAllActivity}
                   onSeeAll={openPatientRecords}
@@ -361,7 +376,7 @@ function App() {
               ) : (
                 <DoctorDashboard
                     patients={patients}
-                    onOpenReport={openReport}
+                    onOpenReport={(id) => openReport(id, "dashboard")}
                     onOpenPatientRecords={() => {
                         setCurrentPage("patient-records")
                         setActiveView("dashboard")
