@@ -21,7 +21,7 @@ const doctorNavItems = [
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [showLanding, setShowLanding] = useState(true)
+  const [screen, setScreen] = useState("landing")
   const [userProfile, setUserProfile] = useState(null)
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [activeView, setActiveView] = useState('dashboard')
@@ -297,25 +297,38 @@ function App() {
       ? adminNavItems
       : doctorNavItems
   if (loading) {
-    return null
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#020917]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-2xl font-black text-white">
+            MB
+          </div>
+
+          <p className="text-slate-400">
+            Restoring session...
+          </p>
+        </div>
+      </div>
+    )
   }
+
   if (!isLoggedIn) {
-    if (showLanding) {
+    if (screen === "landing") {
       return (
         <LandingPage
-          onDoctorLogin={() => setShowLanding(false)}
+          onDoctorLogin={() => setScreen("login")}
         />
-      );
+      )
     }
 
     return (
       <Login
         onLoginSuccess={(profile) => {
-          setUserProfile(profile);
-          setIsLoggedIn(true);
+          setUserProfile(profile)
+          setIsLoggedIn(true)
         }}
       />
-    );
+    )
   }
 
   return (
@@ -373,9 +386,10 @@ function App() {
             <button
               onClick={async () => {
                 await supabase.auth.signOut()
+
                 setUserProfile(null)
                 setIsLoggedIn(false)
-                setShowLanding(true)
+                setScreen("landing")
               }}
               className="flex w-full items-center gap-2 rounded-2xl px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 transition-all duration-200 hover:bg-rose-500/5 hover:text-rose-200"
             >
