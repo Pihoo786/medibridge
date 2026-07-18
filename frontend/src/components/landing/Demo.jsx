@@ -20,13 +20,13 @@ function Demo() {
 
         <div className="mt-14 overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl">
 
-          {/*<video
+          <video
             controls
             className="w-full"
             poster="/demo-thumbnail.png"
           >
             <source src="/demo.mp4" type="video/mp4" />
-          </video>*/}
+          </video>
 
         </div>
 
