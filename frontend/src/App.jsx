@@ -20,6 +20,7 @@ const doctorNavItems = [
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [showLanding, setShowLanding] = useState(true)
   const [userProfile, setUserProfile] = useState(null)
   const [selectedPatient, setSelectedPatient] = useState(null)
@@ -30,8 +31,56 @@ function App() {
   const [reportDetails, setReportDetails] = useState(null)
   const [patientDetails, setPatientDetails] = useState(null)
   const [patientHistory, setPatientHistory] = useState([])
+  const [previousPage, setPreviousPage] = useState(null)
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   console.log("User Profile in App:", userProfile)
+  useEffect(() => {
+    const restoreSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (session) {
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .maybeSingle()
+
+        if (!error && profile) {
+          setUserProfile(profile)
+          setIsLoggedIn(true)
+        }
+      }
+
+      setLoading(false)
+    }
+
+    restoreSession()
+  }, [])
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .maybeSingle()
+
+        setUserProfile(profile)
+        setIsLoggedIn(true)
+      } else {
+        setUserProfile(null)
+        setIsLoggedIn(false)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/reports`)
       .then((res) => res.json())
@@ -62,6 +111,10 @@ function App() {
   })
 
   const openReport = async (reportId, source = null) => {
+    setPreviousPage({
+      currentPage,
+      activeView
+    })
     try {
       const response = await fetch(
         `${API_BASE_URL}/reports/${reportId}/details`
@@ -113,19 +166,14 @@ function App() {
     setSelectedPatient(null)
     setReportDetails(null)
 
-    if (previousState) {
-      setActiveView(previousState.activeView)
-      setCurrentPage(previousState.currentPage)
-      setPatientDetails(previousState.patientDetails)
-      setPatientHistory(previousState.patientHistory)
-      setPreviousState(null)
+    if (previousPage) {
+      setCurrentPage(previousPage.currentPage)
+      setActiveView(previousPage.activeView)
       return
     }
 
-    setPatientDetails(null)
-    setPatientHistory([])
-    setActiveView("dashboard")
     setCurrentPage("dashboard-home")
+    setActiveView("dashboard")
   }
 
   const handleNavClick = (pageId) => {
@@ -248,6 +296,9 @@ function App() {
     userProfile?.role === 'ADMIN'
       ? adminNavItems
       : doctorNavItems
+  if (loading) {
+    return null
+  }
   if (!isLoggedIn) {
     if (showLanding) {
       return (
