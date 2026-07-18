@@ -197,7 +197,10 @@ function AdminDashboard({
                     </td>
                     <td className="px-3 py-3">
                       <button
-                        onClick={() => onOpenReport(patient.id)}
+                        onClick={() => {
+                          console.log("Clicked", patient.id);
+                          onOpenReport(patient.id);
+                        }}
                         className="rounded-lg border border-cyan-500/20 px-3 py-1 text-xs text-cyan-300 transition hover:bg-cyan-500/10"
                       >
                         View
